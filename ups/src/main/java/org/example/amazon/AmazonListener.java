@@ -21,7 +21,7 @@ public class AmazonListener implements Runnable {
                 e.printStackTrace();
             }
 
-            // receive response from world every 5s
+            // receive response from amazon every 1s
             AUCommunication.Builder auCommunication = AUCommunication.newBuilder();
             CommHelper.recvMSG(auCommunication, amazonSocket);
             
