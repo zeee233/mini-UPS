@@ -24,7 +24,6 @@ public class AmazonListener implements Runnable {
             // receive response from amazon every 1s
             AUCommunication.Builder auCommunication = AUCommunication.newBuilder();
             CommHelper.recvMSG(auCommunication, amazonSocket);
-            
         }
     }
 }

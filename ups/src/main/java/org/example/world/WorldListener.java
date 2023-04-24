@@ -25,11 +25,13 @@ public class WorldListener implements Runnable {
             
             UResponses.Builder uResponses = UResponses.newBuilder();
             CommHelper.recvMSG(uResponses, worldSocket);
+
             
             // deal with acks
             for(Long ack: uResponses.getAcksList()){
                 // search in database with this ack, delete request
                 // 1. 
+                
             }
         }
     }
