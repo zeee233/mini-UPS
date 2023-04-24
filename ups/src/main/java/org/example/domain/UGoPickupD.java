@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "u_go_pickup")
-public class UGoPickup {
+public class UGoPickupD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

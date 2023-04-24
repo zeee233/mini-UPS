@@ -12,15 +12,15 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
 
 
-        <mapping class="org.example.domain.ABookTruck"/>
-        <mapping class="org.example.domain.ACKs"/>
-        <mapping class="org.example.domain.AStartDeliver"/>
-        <mapping class="org.example.domain.Package"/>
-        <mapping class="org.example.domain.Truck"/>
-        <mapping class="org.example.domain.UDeliveryLocation"/>
-        <mapping class="org.example.domain.UGoDeliver"/>
-        <mapping class="org.example.domain.UGoPickup"/>
-        <mapping class="org.example.domain.UQuery"/>
+        <mapping class="org.example.domain.ABookTruckD"/>
+        <mapping class="org.example.domain.ACKsD"/>
+        <mapping class="org.example.domain.AStartDeliverD"/>
+        <mapping class="org.example.domain.PackageD"/>
+        <mapping class="org.example.domain.TruckD"/>
+        <mapping class="org.example.domain.UDeliveryLocationD"/>
+        <mapping class="org.example.domain.UGoDeliverD"/>
+        <mapping class="org.example.domain.UGoPickupD"/>
+        <mapping class="org.example.domain.UQueryD"/>
 
     </session-factory>
 </hibernate-configuration>

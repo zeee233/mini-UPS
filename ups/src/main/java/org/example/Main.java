@@ -3,7 +3,7 @@ package org.example;
 import java.io.IOException;
 import java.util.List;
 
-import org.example.domain.UGoPickup;
+import org.example.domain.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,7 +40,7 @@ public class Main {
         // 示例：插入一行到 UGoPickup 表中
         Transaction transaction = session.beginTransaction();
 
-        UGoPickup uGoPickup = new UGoPickup();
+        UGoPickupD uGoPickup = new UGoPickupD();
         uGoPickup.setTruckId(1);
         uGoPickup.setWhId(2);
         uGoPickup.setSeqNum(1L);
@@ -50,10 +50,10 @@ public class Main {
 
         // 示例：根据 truckId 查询 UGoPickup 行
         Integer truckId = 1;
-        List<UGoPickup> uGoPickups = session.createQuery("FROM UGoPickup WHERE truckId = :truckId", UGoPickup.class)
+        List<UGoPickupD> uGoPickups = session.createQuery("FROM UGoPickup WHERE truckId = :truckId", UGoPickupD.class)
                 .setParameter("truckId", truckId)
                 .getResultList();
-        for (UGoPickup uGoPickupResult : uGoPickups) {
+        for (UGoPickupD uGoPickupResult : uGoPickups) {
             System.out.println("Truck ID: " + uGoPickupResult.getTruckId());
             System.out.println("Warehouse ID: " + uGoPickupResult.getWhId());
             System.out.println("Sequence Number: " + uGoPickupResult.getSeqNum());

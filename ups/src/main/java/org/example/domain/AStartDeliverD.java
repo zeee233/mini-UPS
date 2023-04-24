@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "a_start_deliver")
-public class AStartDeliver {
+public class AStartDeliverD {
     public Long getPackageId() {
         return packageId;
     }

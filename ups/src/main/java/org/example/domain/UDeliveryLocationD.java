@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "u_delivery_location")
 // it needs to setPackageId, setX, setY, setUGoDeliver
-public class UDeliveryLocation {
+public class UDeliveryLocationD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +23,7 @@ public class UDeliveryLocation {
     // will not be loaded until UGoDeliver is visited, to improve the performance
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "u_go_deliver_id", nullable = false)
-    private UGoDeliver uGoDeliver;
+    private UGoDeliverD uGoDeliver;
 
     public Long getId() {
         return id;
@@ -57,11 +57,11 @@ public class UDeliveryLocation {
         this.y = y;
     }
 
-    public UGoDeliver getUGoDeliver() {
+    public UGoDeliverD getUGoDeliver() {
         return uGoDeliver;
     }
 
-    public void setUGoDeliver(UGoDeliver uGoDeliver) {
+    public void setUGoDeliver(UGoDeliverD uGoDeliver) {
         this.uGoDeliver = uGoDeliver;
     }
 }

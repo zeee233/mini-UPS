@@ -10,7 +10,7 @@ import java.util.List;
 
 // 在此处，您可以使用 JPA 持久化 uGoDeliver 实例，这将自动保存关联的 UDeliveryLocation 实例
 // 例如：entityManager.persist(uGoDeliver);??????????
-public class UGoDeliver {
+public class UGoDeliverD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +22,7 @@ public class UGoDeliver {
     private Long seqNum;
 
     @OneToMany(mappedBy = "uGoDeliver", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UDeliveryLocation> packages = new ArrayList<>();
+    private List<UDeliveryLocationD> packages = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -48,20 +48,20 @@ public class UGoDeliver {
         this.seqNum = seqNum;
     }
 
-    public List<UDeliveryLocation> getPackages() {
+    public List<UDeliveryLocationD> getPackages() {
         return packages;
     }
     //useless
-    public void setPackages(List<UDeliveryLocation> packages) {
+    public void setPackages(List<UDeliveryLocationD> packages) {
         this.packages = packages;
     }
 
-    public void addUDeliveryLocation(UDeliveryLocation uDeliveryLocation) {
+    public void addUDeliveryLocation(UDeliveryLocationD uDeliveryLocation) {
         packages.add(uDeliveryLocation);
         uDeliveryLocation.setUGoDeliver(this);
     }
 
-    public void removeUDeliveryLocation(UDeliveryLocation uDeliveryLocation) {
+    public void removeUDeliveryLocation(UDeliveryLocationD uDeliveryLocation) {
         packages.remove(uDeliveryLocation);
         uDeliveryLocation.setUGoDeliver(null);
     }

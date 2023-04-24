@@ -3,7 +3,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "acks")
-public class ACKs {
+public class ACKsD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ackId;

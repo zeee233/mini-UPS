@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "u_query")
-public class UQuery {
+public class UQueryD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

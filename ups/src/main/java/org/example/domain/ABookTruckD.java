@@ -3,42 +3,12 @@ package org.example.domain;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "package")
-public class Package {
+@Table(name = "a_book_truck")
+public class ABookTruckD {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "package_id", nullable = false)
-    private Long packageId;
-
-    @Column(name = "warehouse_id", nullable = false)
-    private Integer warehouseId;
-
-    @Column(name = "warehouse_x", nullable = false)
-    private Integer warehouseX;
-
-    @Column(name = "warehouse_y", nullable = false)
-    private Integer warehouseY;
-
-    @Column(name = "destination_x", nullable = false)
-    private Integer destinationX;
-
-    @Column(name = "destination_y", nullable = false)
-    private Integer destinationY;
-
-    //ups required only when Amazon provided
-    @Column(name = "ups_id")
-    private String upsId;
-
-    @Column(name = "status", nullable = false)
-    private String status;
-
-    //truck can be null, since it can be in "packed" process
-    @Column(name = "truck_id")
-    private Integer truckId;
-
-    // Getters and setters
     public Long getPackageId() {
         return packageId;
     }
@@ -95,19 +65,37 @@ public class Package {
         this.upsId = upsId;
     }
 
-    public String getStatus() {
-        return status;
+    public Long getSeqNum() {
+        return seqNum;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setSeqNum(Long seqNum) {
+        this.seqNum = seqNum;
     }
 
-    public Integer getTruckId() {
-        return truckId;
-    }
+    @Column(name = "package_id", nullable = false)
+    private Long packageId;
 
-    public void setTruckId(Integer truckId) {
-        this.truckId = truckId;
-    }
+    @Column(name = "warehouse_id", nullable = false)
+    private Integer warehouseId;
+
+    @Column(name = "warehouse_x", nullable = false)
+    private Integer warehouseX;
+
+    @Column(name = "warehouse_y", nullable = false)
+    private Integer warehouseY;
+
+    @Column(name = "destination_x", nullable = false)
+    private Integer destinationX;
+
+    @Column(name = "destination_y", nullable = false)
+    private Integer destinationY;
+
+    @Column(name = "ups_id")
+    private String upsId;
+
+    @Column(name = "seq_num")
+    private Long seqNum;
+
+
 }
