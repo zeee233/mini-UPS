@@ -1,64 +1,39 @@
 package org.example;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
-import org.example.WorldUps.UConnect;
-import org.example.WorldUps.UConnected;
-import org.example.WorldUps.UInitTruck;
-
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.CodedOutputStream;
-import com.google.protobuf.GeneratedMessageV3;
-import com.google.protobuf.ByteString.Output;
+import org.example.protoc.UpsAmazon.*;
+import org.example.protoc.WorldUps.*;
+import org.example.utils.*;
 
 public class UpsServer {
-    private ServerSocket upsSocket;
+    private ServerSocket upsServerSocket;
     private Socket worldSocket;
+    private Socket amazonSocket;
+    private long worldID;
+
+    private ThreadPoolExecutor threadPool;
 
     private final int WORLD_PORT = 12345;
     private final int AMAZON_PORT = 23456;
 
-    // private InputStream in;
-    // private OutputStream out;
-
     public UpsServer(int port) throws IOException {
-        // upsSocket = new ServerSocket(port);
+        upsServerSocket = new ServerSocket(port);
         worldSocket = new Socket("127.0.0.1", WORLD_PORT);
+
+        BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
+        threadPool = new ThreadPoolExecutor(20, 20, 100, TimeUnit.SECONDS, workQueue);
+        upsServerSocket.setSoTimeout(1200000);
     }
 
-    // TODO: move them to other file
-    public <T extends GeneratedMessageV3.Builder<?>> boolean sendMSG(T builder, OutputStream out) {
-        try {
-            CodedOutputStream codedOutputStream = CodedOutputStream.newInstance(out);
-            codedOutputStream.writeUInt32NoTag(builder.build().toByteArray().length);
-            builder.build().writeTo(codedOutputStream);
-            codedOutputStream.flush();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public <T extends GeneratedMessageV3.Builder<?>> boolean recvMSG(T builder, InputStream in) {
-        try {
-            CodedInputStream codedInputStream = CodedInputStream.newInstance(in);
-            int length = codedInputStream.readRawVarint32();
-            int parseLimit = codedInputStream.pushLimit(length);
-            builder.mergeFrom(codedInputStream);
-            codedInputStream.popLimit(parseLimit);
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public UConnect.Builder createUConnect(Integer worldID, int truckNum) {
+    // TODO: may remove to other file
+    public UConnect.Builder createUConnect(Long worldID, int truckNum) {
         UConnect.Builder connectToWorld = UConnect.newBuilder();
         if (worldID != null) {
             connectToWorld.setWorldid(worldID);
@@ -74,15 +49,49 @@ public class UpsServer {
         return connectToWorld;
     }
 
-    public boolean connectToWorld() throws IOException {
-        sendMSG(createUConnect(null, 10), worldSocket.getOutputStream());
+    public boolean connectToWorld(UConnect.Builder connectToWorld) throws IOException {
+        CommHelper.sendMSG(connectToWorld, worldSocket);
 
         UConnected.Builder connectResult = UConnected.newBuilder();
-        recvMSG(connectResult, worldSocket.getInputStream());
+        CommHelper.recvMSG(connectResult, worldSocket);
 
         System.out.println("world ID: " + connectResult.getWorldid());
         System.out.println("result: " + connectResult.getResult());
 
         return connectResult.getResult().equals("connected!");
     }
+
+    public void start() {
+        try {
+            // 1. waiting for amazon to connect
+            amazonSocket = upsServerSocket.accept();
+            // 2. waiting for world id
+            AInformWorld.Builder aInformWorld = AInformWorld.newBuilder();
+            CommHelper.recvMSG(aInformWorld, worldSocket);
+            worldID = aInformWorld.getWorldid();
+            // 3. connect to the world
+            boolean connectResult = false;
+            do {
+                connectResult = connectToWorld(createUConnect(worldID, 50));
+            } while (!connectResult);
+            // TODO: remember to write the truck to the database
+
+            // start world listener
+            // start world receiver
+        } catch (IOException e) {
+            stop();
+            e.printStackTrace();
+        }
+    }
+
+    public void stop() {
+        try {
+            worldSocket.close();
+            amazonSocket.close();
+            upsServerSocket.close();
+        } catch (IOException e) {
+            System.out.println("Failed to stop server: " + e.getMessage());
+        }
+    }
+
 }
