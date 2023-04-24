@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("Helo world!");
         UpsServer upsServer = new UpsServer(9999);
-        upsServer.connectToWorld();
+        // upsServer.connectToWorld();
 
 
         Configuration configuration = new Configuration();
