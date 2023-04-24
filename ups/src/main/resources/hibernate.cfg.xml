@@ -11,6 +11,16 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
 
+
+        <mapping class="org.example.domain.ABookTruck"/>
+        <mapping class="org.example.domain.ACKs"/>
+        <mapping class="org.example.domain.AStartDeliver"/>
+        <mapping class="org.example.domain.Package"/>
+        <mapping class="org.example.domain.Truck"/>
+        <mapping class="org.example.domain.UDeliveryLocation"/>
+        <mapping class="org.example.domain.UGoDeliver"/>
         <mapping class="org.example.domain.UGoPickup"/>
+        <mapping class="org.example.domain.UQuery"/>
+
     </session-factory>
 </hibernate-configuration>
