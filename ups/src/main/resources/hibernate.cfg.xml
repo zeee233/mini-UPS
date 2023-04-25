@@ -16,6 +16,7 @@
         <mapping class="org.example.domain.ACKsD"/>
         <mapping class="org.example.domain.AStartDeliverD"/>
         <mapping class="org.example.domain.PackageD"/>
+        <mapping class="org.example.domain.ResendACKsD"/>
         <mapping class="org.example.domain.TruckD"/>
         <mapping class="org.example.domain.UDeliveryLocationD"/>
         <mapping class="org.example.domain.UGoDeliverD"/>
