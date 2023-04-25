@@ -1,11 +1,32 @@
 package org.example.amazon;
 
-public class AmazonSender implements Runnable {
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
+import java.net.Socket;
+
+public class AmazonSender implements Runnable {
+    private Socket amazonSocket;
+    SessionFactory sessionFactory;
+    public AmazonSender(Socket socket, SessionFactory sessionFac) {
+        amazonSocket = socket;
+        sessionFactory =sessionFac;
+    }
     @Override
     public void run() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'run'");
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            Session session = sessionFactory.openSession();
+
+
+
+
+        }
+
     }
 
 }
