@@ -1,6 +1,7 @@
 package org.example.world;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.example.protoc.WorldUps.*;
@@ -38,20 +39,22 @@ public class WorldSender implements Runnable {
             List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickup", UGoPickupD.class).getResultList();
             for(UGoPickupD pickUpRequest: allUGoPickups){
                 UGoPickup.Builder uGoPickUp = UGoPickup.newBuilder();
-                uGoPickUp.setTruckid(pickUpRequest.getTruckId()).setWhid(pickUpRequest.getWhId()).setSeqnum(SeqNumGenerator.generateSeqNum());
+                uGoPickUp.setTruckid(pickUpRequest.getTruckId()).setWhid(pickUpRequest.getWhId()).setSeqnum(pickUpRequest.getSeqNum());
+                uCommands.addPickups(uGoPickUp);
             }
 
-            // Fetch all rows from the UGoPickup table 
-            // List<UGoPickup> allUGoPickups =
-            // session.createQuery("FROM UGoPickup", UGoPickup.class).getResultList(); //
-            // Print each UGoPickup tuple for (UGoPickup uGoPickupResult : allUGoPickups) {
-            // System.out.println("ID: " + uGoPickupResult.getId());
-            // System.out.println("Truck ID: " + uGoPickupResult.getTruckId());
-            // System.out.println("Warehouse ID: " + uGoPickupResult.getWhId());
-            // System.out.println("Sequence Number: " + uGoPickupResult.getSeqNum());
-            // System.out.println(); }
-
             // then search UGoDeliver
+            List<UGoDeliverD> allUGoDelivers = session.createQuery("FROM uGoDeliver", UGoDeliverD.class).getResultList();
+            for(UGoDeliverD deliverRequest: allUGoDelivers){
+                UGoDeliver.Builder uGoDeliver = UGoDeliver.newBuilder();
+                
+                for(UDeliveryLocationD location: deliverRequest.getPackages()){
+                    UDeliveryLocation.Builder uLocation = UDeliveryLocation.newBuilder();
+                    uLocation.setPackageid(location.getPackageId()).setX(location.getX()).setY(location.getY());
+                    uGoDeliver.addPackages(uLocation);
+                }
+                uGoDeliver.setTruckid(deliverRequest.getTruckId()).setSeqnum(deliverRequest.getSeqNum());
+            }
 
             // optional: UQuery??
 
