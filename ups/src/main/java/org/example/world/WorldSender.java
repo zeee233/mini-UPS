@@ -36,7 +36,7 @@ public class WorldSender implements Runnable {
 
             Session session = sessionFactory.openSession();
             // first search UGoPickup
-            List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickup", UGoPickupD.class).getResultList();
+            List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickupD", UGoPickupD.class).getResultList();
             // for every record in UGoPickUp table, make it as uGoPickUp and add it to uCommands
             for(UGoPickupD pickUpRequest: allUGoPickups){
                 UGoPickup.Builder uGoPickUp = UGoPickup.newBuilder();
@@ -45,7 +45,7 @@ public class WorldSender implements Runnable {
             }
 
             // then search UGoDeliver
-            List<UGoDeliverD> allUGoDelivers = session.createQuery("FROM uGoDeliver", UGoDeliverD.class).getResultList();
+            List<UGoDeliverD> allUGoDelivers = session.createQuery("FROM UGoDeliverD", UGoDeliverD.class).getResultList();
             // for every record in UGoDeliver table, make it as UGoDeliver and add it to uCommands
             for(UGoDeliverD deliverRequest: allUGoDelivers){
                 UGoDeliver.Builder uGoDeliver = UGoDeliver.newBuilder();
@@ -59,7 +59,7 @@ public class WorldSender implements Runnable {
             }
 
             // add acks from 
-            List<>
+            List<ResendACKsD> allResendAcks = session.createQuery("FROM ")
 
             // TODO: optional: UQuery??
 
