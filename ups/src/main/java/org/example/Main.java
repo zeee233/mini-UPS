@@ -38,30 +38,32 @@ public class Main {
 
         // Step 2: Execute your program logic
         // 示例：插入一行到 UGoPickup 表中
-        Transaction transaction = session.beginTransaction();
+        // Transaction transaction = session.beginTransaction();
 
-        UGoPickupD uGoPickup = new UGoPickupD();
-        uGoPickup.setTruckId(1);
-        uGoPickup.setWhId(2);
-        uGoPickup.setSeqNum(1L);
+        // UGoPickupD uGoPickup = new UGoPickupD();
+        // uGoPickup.setTruckId(1);
+        // uGoPickup.setWhId(2);
+        // uGoPickup.setSeqNum(1L);
 
-        session.save(uGoPickup);
-        transaction.commit();
+        // session.save(uGoPickup);
+        // transaction.commit();
 
-        // 示例：根据 truckId 查询 UGoPickup 行
-        Integer truckId = 1;
-        List<UGoPickupD> uGoPickups = session.createQuery("FROM UGoPickup WHERE truckId = :truckId", UGoPickupD.class)
-                .setParameter("truckId", truckId)
-                .getResultList();
-        for (UGoPickupD uGoPickupResult : uGoPickups) {
-            System.out.println("Truck ID: " + uGoPickupResult.getTruckId());
-            System.out.println("Warehouse ID: " + uGoPickupResult.getWhId());
-            System.out.println("Sequence Number: " + uGoPickupResult.getSeqNum());
-            System.out.println();
-        }
+        // // 示例：根据 truckId 查询 UGoPickup 行
+        // Integer truckId = 1;
+        // List<UGoPickupD> uGoPickups = session.createQuery("FROM UGoPickup WHERE truckId = :truckId", UGoPickupD.class)
+        //         .setParameter("truckId", truckId)
+        //         .getResultList();
+        // for (UGoPickupD uGoPickupResult : uGoPickups) {
+        //     System.out.println("Truck ID: " + uGoPickupResult.getTruckId());
+        //     System.out.println("Warehouse ID: " + uGoPickupResult.getWhId());
+        //     System.out.println("Sequence Number: " + uGoPickupResult.getSeqNum());
+        //     System.out.println();
+        // }
 
         // 关闭 session 和 sessionFactory
         session.close();
+
+        UpsServer upsServer = new UpsServer(9999);
         sessionFactory.close();
 
     }
