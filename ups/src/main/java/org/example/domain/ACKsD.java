@@ -9,15 +9,15 @@ public class ACKsD {
     private Long ackId;
 
     @Column(name = "ack", nullable = false)
-    private Integer ack;
+    private Long ack;
     // Getters and setters
 
 
-    public Integer getAck() {
+    public Long getAck() {
         return ack;
     }
 
-    public void setAck(Integer ack) {
+    public void setAck(Long ack) {
         this.ack = ack;
     }
 
