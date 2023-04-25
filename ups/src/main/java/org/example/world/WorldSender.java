@@ -37,6 +37,7 @@ public class WorldSender implements Runnable {
             Session session = sessionFactory.openSession();
             // first search UGoPickup
             List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickup", UGoPickupD.class).getResultList();
+            // for every record in UGoPickUp table, make it as uGoPickUp and add it to uCommands
             for(UGoPickupD pickUpRequest: allUGoPickups){
                 UGoPickup.Builder uGoPickUp = UGoPickup.newBuilder();
                 uGoPickUp.setTruckid(pickUpRequest.getTruckId()).setWhid(pickUpRequest.getWhId()).setSeqnum(pickUpRequest.getSeqNum());
@@ -45,18 +46,22 @@ public class WorldSender implements Runnable {
 
             // then search UGoDeliver
             List<UGoDeliverD> allUGoDelivers = session.createQuery("FROM uGoDeliver", UGoDeliverD.class).getResultList();
+            // for every record in UGoDeliver table, make it as UGoDeliver and add it to uCommands
             for(UGoDeliverD deliverRequest: allUGoDelivers){
                 UGoDeliver.Builder uGoDeliver = UGoDeliver.newBuilder();
-                
                 for(UDeliveryLocationD location: deliverRequest.getPackages()){
                     UDeliveryLocation.Builder uLocation = UDeliveryLocation.newBuilder();
                     uLocation.setPackageid(location.getPackageId()).setX(location.getX()).setY(location.getY());
                     uGoDeliver.addPackages(uLocation);
                 }
                 uGoDeliver.setTruckid(deliverRequest.getTruckId()).setSeqnum(deliverRequest.getSeqNum());
+                uCommands.addDeliveries(uGoDeliver);
             }
 
-            // optional: UQuery??
+            // add acks from 
+            List<>
+
+            // TODO: optional: UQuery??
 
             session.close();
         }
