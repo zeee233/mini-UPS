@@ -34,6 +34,7 @@ public class AmazonListener implements Runnable {
             // Parse the fields in AUCommunication
             List<ABookTruck> bookTruckList = auCommunication.getBookingsList();
             List<AStartDeliver > startDelieverList = auCommunication.getDeliversList();
+            //TODO: have ack to deal with
             for (ABookTruck bookTruck : bookTruckList) {
                 long packageId = bookTruck.getPackageid();
                 int warehouseId = bookTruck.getWarehouseid();
@@ -85,7 +86,7 @@ public class AmazonListener implements Runnable {
                     newPackage.setUpsId(upsid);
                 }
                 //if has error, you need to delete the truckID with status "packing"
-                newPackage.setStatus("packing");
+                newPackage.setStatus("packed");
                 Transaction transaction1 = session.beginTransaction();
                 session.save(newPackage);
                 transaction1.commit();
@@ -95,7 +96,7 @@ public class AmazonListener implements Runnable {
                 // setTruck ID、WhId、 sequenceNumber
                 newGoPickup.setTruckId(closestTruck.getTruckId());
                 newGoPickup.setWhId(warehouseId);
-                //todo: import sequenceNumber
+
                 newGoPickup.setSeqNum(SeqNumGenerator.generateSeqNum());
 
                 Transaction transaction2 = session.beginTransaction();
@@ -119,7 +120,6 @@ public class AmazonListener implements Runnable {
                 UGoDeliverD uGoDeliverD = new UGoDeliverD();
                 uGoDeliverD.setTruckId(packageD.getTruckId());
 
-                //todo: use the seqnum generated
                 uGoDeliverD.setSeqNum(SeqNumGenerator.generateSeqNum());
 
 
@@ -145,9 +145,8 @@ public class AmazonListener implements Runnable {
                 session.save(packageD);
 
                 transaction.commit();
-
             }
-
+            session.close();
         }
     }
 }
