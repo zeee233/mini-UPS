@@ -14,6 +14,12 @@ public class Main {
         MockAmazon mockAmazon = new MockAmazon(9999);
         mockAmazon.connectToWorld(mockAmazon.createUConnect(null, 10));
         mockAmazon.sendAInformWorld();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mockAmazon.sendABookTruck();
         mockAmazon.receiveUTruckArrived();
     }
 }

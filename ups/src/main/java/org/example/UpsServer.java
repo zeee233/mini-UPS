@@ -52,7 +52,7 @@ public class UpsServer {
         worldListener = new WorldListener(worldSocket, sessionFactory);
         worldSender = new WorldSender(worldSocket, sessionFactory);
         amazonListener = new AmazonListener(amazonSocket, sessionFactory);
-        
+        amazonSender = new AmazonSender(amazonSocket, sessionFactory);
     }
 
     // TODO: may remove to other file
@@ -112,8 +112,11 @@ public class UpsServer {
             // TODO: remember to write the truck to the database
 
             // start world listener
+            threadPool.execute(amazonListener);
+            threadPool.execute(worldListener);
+            threadPool.execute(worldSender);
+            threadPool.execute(amazonSender);
 
-            // start world receiver
         } catch (IOException e) {
             stop();
             e.printStackTrace();

@@ -79,4 +79,13 @@ public class MockAmazon {
         System.out.println("Packageid: " + uTruckArrived.getPackageid());
         System.out.println("Truckid: " + uTruckArrived.getTruckid());
     }
+
+    public void stop() {
+        try {
+            worldSocket.close();
+            upsSocket.close();
+        } catch (IOException e) {
+            System.out.println("Failed to stop mockAmazon: " + e.getMessage());
+        }
+    }
 }
