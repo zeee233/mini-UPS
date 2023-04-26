@@ -10,12 +10,15 @@ import java.util.concurrent.TimeUnit;
 
 import org.example.amazon.AmazonListener;
 import org.example.amazon.AmazonSender;
+import org.example.domain.*;
 import org.example.protoc.UpsAmazon.*;
 import org.example.protoc.WorldUps.*;
 import org.example.utils.*;
 import org.example.world.WorldListener;
 import org.example.world.WorldSender;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 public class UpsServer {
     private ServerSocket upsServerSocket;
@@ -47,6 +50,9 @@ public class UpsServer {
         this.sessionFactory = sessionFactory;
 
         worldListener = new WorldListener(worldSocket, sessionFactory);
+        worldSender = new WorldSender(worldSocket, sessionFactory);
+        amazonListener = new AmazonListener(amazonSocket, sessionFactory);
+        
     }
 
     // TODO: may remove to other file
@@ -56,12 +62,24 @@ public class UpsServer {
             connectToWorld.setWorldid(worldID);
         }
         connectToWorld.setIsAmazon(false);
+        Session session = sessionFactory.openSession();
         for (int i = 0; i < truckNum; ++i) {
             UInitTruck.Builder truck = UInitTruck.newBuilder();
             truck.setId(i + 1).setX(0).setY(0);
             truck.build();
             connectToWorld.addTrucks(truck);
+
+            //insert into the Truck table
+            TruckD cur_truck = new TruckD();
+            cur_truck.setTruckId(i);
+            cur_truck.setX(0);
+            cur_truck.setY(0);
+            cur_truck.setStatus("idle");
+            Transaction transaction=session.beginTransaction();
+            session.save(cur_truck);
+            transaction.commit();
         }
+        session.close();
 
         return connectToWorld;
     }
