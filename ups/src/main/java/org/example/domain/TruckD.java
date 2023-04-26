@@ -50,6 +50,7 @@ public class TruckD {
         this.status = status;
     }
 
+    //“idle”, “arrive warehouse”, “delivering”
     @Column(name = "status", nullable = false)
     private String status;
 

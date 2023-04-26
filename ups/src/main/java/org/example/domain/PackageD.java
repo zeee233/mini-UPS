@@ -31,6 +31,7 @@ public class PackageD {
     @Column(name = "ups_id")
     private String upsId;
 
+    // packing, packed, loading, loaded, delivering, delivered.
     @Column(name = "status", nullable = false)
     private String status;
 
@@ -38,6 +39,16 @@ public class PackageD {
     @Column(name = "truck_id")
     private Integer truckId;
 
+    public String getDetail() {
+        return detail;
+    }
+
+    public void setDetail(String detail) {
+        this.detail = detail;
+    }
+
+    @Column(name = "detail_")
+    private String detail ;
     // Getters and setters
     public Long getPackageId() {
         return packageId;
