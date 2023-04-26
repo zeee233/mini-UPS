@@ -36,7 +36,9 @@ public class WorldSender implements Runnable {
             UCommands.Builder uCommands = UCommands.newBuilder();
 
             Session session = sessionFactory.openSession();
-            // first search UGoPickup
+            Transaction transaction = session.beginTransaction();
+
+            // 1. first search UGoPickup
             List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickupD", UGoPickupD.class).getResultList();
             // for every record in UGoPickUp table, make it as uGoPickUp and add it to
             // uCommands
@@ -45,9 +47,16 @@ public class WorldSender implements Runnable {
                 uGoPickUp.setTruckid(pickUpRequest.getTruckId()).setWhid(pickUpRequest.getWhId())
                         .setSeqnum(pickUpRequest.getSeqNum());
                 uCommands.addPickups(uGoPickUp);
+
+                // change status of truck to traveling
+                int truckid = pickUpRequest.getTruckId();
+                TruckD truckD = session.createQuery("FROM TruckD WHERE truckId = :truckId", TruckD.class)
+                        .setParameter("truckId", truckid).uniqueResult();
+                truckD.setStatus("traveling");
+                session.save(truckD);
             }
 
-            // then search UGoDeliver
+            // 2. then search UGoDeliver
             List<UGoDeliverD> allUGoDelivers = session.createQuery("FROM UGoDeliverD", UGoDeliverD.class)
                     .getResultList();
             // for every record in UGoDeliver table, make it as UGoDeliver and add it to
@@ -58,25 +67,37 @@ public class WorldSender implements Runnable {
                     UDeliveryLocation.Builder uLocation = UDeliveryLocation.newBuilder();
                     uLocation.setPackageid(location.getPackageId()).setX(location.getX()).setY(location.getY());
                     uGoDeliver.addPackages(uLocation);
+
+                    // change status of package to delivering
+                    PackageD packageD = session
+                            .createQuery("FROM PackageD WHERE packageId = :packageId", PackageD.class)
+                            .setParameter("packageId", uLocation.getPackageid()).uniqueResult();
+                    packageD.setStatus("delivering");
+                    session.save(packageD);
                 }
                 uGoDeliver.setTruckid(deliverRequest.getTruckId()).setSeqnum(deliverRequest.getSeqNum());
                 uCommands.addDeliveries(uGoDeliver);
+
+                // change status of truck to delivering
+                int truckid = deliverRequest.getTruckId();
+                TruckD truckD = session.createQuery("FROM TruckD WHERE truckId = :truckId", TruckD.class)
+                        .setParameter("truckId", truckid).uniqueResult();
+                truckD.setStatus("delivering");
+                session.save(truckD);
             }
 
-            // add acks from Resend table
+            // 3. add acks from Resend table
             List<ResendACKsD> allResendAcks = session.createQuery("FROM ResendACKsD", ResendACKsD.class)
                     .getResultList();
 
-            // TODO: change ack to long!!!
             Iterable<Long> allAcks = allResendAcks.stream().map(ResendACKsD::getAck).collect(Collectors.toList());
             uCommands.addAllAcks(allAcks);
 
-            // send uCommands to world
+            // 4. send uCommands to world
             CommHelper.sendMSG(uCommands, worldSocket);
 
             // TODO: maybe move to other file to only deal with table
             // delete acks from table
-            Transaction transaction = session.beginTransaction();
             for (ResendACKsD record : allResendAcks) {
                 session.delete(record);
             }
