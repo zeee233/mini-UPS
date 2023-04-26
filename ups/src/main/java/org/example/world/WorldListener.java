@@ -22,11 +22,12 @@ public class WorldListener implements Runnable {
     @Override
     public void run() {
         // loop to listen for responses from world
+        Session session = sessionFactory.openSession();
         while (true) {
             UResponses.Builder uResponses = UResponses.newBuilder();
             CommHelper.recvMSG(uResponses, worldSocket);
 
-            Session session = sessionFactory.openSession();
+
             Transaction transaction = session.beginTransaction();
 
             // 1. Deal UFinished
@@ -113,7 +114,7 @@ public class WorldListener implements Runnable {
             }
 
             transaction.commit();
-            session.close();
+            //session.close();
         }
     }
 }
