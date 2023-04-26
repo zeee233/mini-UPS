@@ -8,9 +8,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.example.amazon.AmazonListener;
+import org.example.amazon.AmazonSender;
 import org.example.protoc.UpsAmazon.*;
 import org.example.protoc.WorldUps.*;
 import org.example.utils.*;
+import org.example.world.WorldListener;
+import org.example.world.WorldSender;
+import org.hibernate.SessionFactory;
 
 public class UpsServer {
     private ServerSocket upsServerSocket;
@@ -18,18 +23,30 @@ public class UpsServer {
     private Socket amazonSocket;
     private long worldID;
 
+    private WorldListener worldListener;
+    private WorldSender worldSender;
+
+    private AmazonListener amazonListener;
+    private AmazonSender amazonSender;
+
+    private SessionFactory sessionFactory;
+
     private ThreadPoolExecutor threadPool;
 
     private final int WORLD_PORT = 12345;
     private final int AMAZON_PORT = 23456;
 
-    public UpsServer(int port) throws IOException {
+    public UpsServer(int port, SessionFactory sessionFactory) throws IOException {
         upsServerSocket = new ServerSocket(port);
         worldSocket = new Socket("127.0.0.1", WORLD_PORT);
 
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         threadPool = new ThreadPoolExecutor(20, 20, 100, TimeUnit.SECONDS, workQueue);
         upsServerSocket.setSoTimeout(1200000);
+
+        this.sessionFactory = sessionFactory;
+
+        worldListener = new WorldListener(worldSocket, sessionFactory);
     }
 
     // TODO: may remove to other file
@@ -66,9 +83,9 @@ public class UpsServer {
             // 1. waiting for amazon to connect
             amazonSocket = upsServerSocket.accept();
             // 2. waiting for world id
-            AInformWorld.Builder aInformWorld = AInformWorld.newBuilder();
-            CommHelper.recvMSG(aInformWorld, worldSocket);
-            worldID = aInformWorld.getWorldid();
+            UReceivedWorld.Builder uReceivedWorld = UReceivedWorld.newBuilder();
+            CommHelper.recvMSG(uReceivedWorld, worldSocket);
+            worldID = uReceivedWorld.getWorldid();
             // 3. connect to the world
             boolean connectResult = false;
             do {
@@ -77,6 +94,7 @@ public class UpsServer {
             // TODO: remember to write the truck to the database
 
             // start world listener
+
             // start world receiver
         } catch (IOException e) {
             stop();
