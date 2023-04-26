@@ -63,7 +63,7 @@ public class Main {
         // 关闭 session 和 sessionFactory
         session.close();
 
-        UpsServer upsServer = new UpsServer(9999);
+        UpsServer upsServer = new UpsServer(9999, sessionFactory);
         sessionFactory.close();
 
     }
