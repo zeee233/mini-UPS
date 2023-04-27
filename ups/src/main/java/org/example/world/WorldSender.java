@@ -28,7 +28,7 @@ public class WorldSender implements Runnable {
         Session session = sessionFactory.openSession();
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -98,7 +98,10 @@ public class WorldSender implements Runnable {
                 continue;
             }
             CommHelper.sendMSG(uCommands, worldSocket);
-
+            System.out.println("----------World Sender---------------------");
+            System.out.println("u_go_pickup count:"+uCommands.getPickupsCount());
+            System.out.println(uCommands.getPickupsList());
+            System.out.println("------------------------------------------");
             // TODO: maybe move to other file to only deal with table
             // delete acks from table
             for (ResendACKsD record : allResendAcks) {
