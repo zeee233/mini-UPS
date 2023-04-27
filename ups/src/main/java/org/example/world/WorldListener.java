@@ -22,11 +22,17 @@ public class WorldListener implements Runnable {
     @Override
     public void run() {
         // loop to listen for responses from world
+        Session session = sessionFactory.openSession();
         while (true) {
             UResponses.Builder uResponses = UResponses.newBuilder();
             CommHelper.recvMSG(uResponses, worldSocket);
 
-            Session session = sessionFactory.openSession();
+            System.out.println("Receive something!!!!!!!!!!!!!!!!!!1");
+            System.out.println("completionList: "+uResponses.getCompletionsList());
+            System.out.println("compldtion number:"+uResponses.getCompletionsCount());
+            System.out.println("Ack:"+uResponses.getAcksList());
+            System.out.println("Error: "+uResponses.getErrorList());
+
             Transaction transaction = session.beginTransaction();
 
             // 1. Deal UFinished
@@ -42,13 +48,13 @@ public class WorldListener implements Runnable {
                         .createQuery("FROM ResendACKsD WHERE ack = :ack", ResendACKsD.class).setParameter("ack", seqNum)
                         .getResultList();
 
-                // if not in resend acks table, save it
-                if (!allResendACKsDs.isEmpty()) {
+                // empty => if not in resend acks table, save it
+                if (allResendACKsDs.isEmpty()) {
                     ResendACKsD resendACKsD = new ResendACKsD();
                     resendACKsD.setAck(seqNum);
                     session.save(resendACKsD);
                 }
-                // if already exists, do not handle again
+                // not empty => if already exists, do not handle again
                 if (!allAcks.isEmpty()) {
                     break;
                 }
@@ -62,7 +68,13 @@ public class WorldListener implements Runnable {
                 int truckid = uFinished.getTruckid();
                 TruckD truckD = session.createQuery("FROM TruckD WHERE truckId = :truckId", TruckD.class)
                         .setParameter("truckId", truckid).uniqueResult();
+                System.out.println("---------------World Listener---------------------- ");
+                System.out.println("[DEBUG] UFinished truck id: " + uFinished.getTruckid());
+                System.out.println("[DEBUG] UFinished truck x: " + uFinished.getX());
+                System.out.println("[DEBUG] UFinished truck y: " + uFinished.getY());
                 System.out.println("[DEBUG] UFinished truck status: " + uFinished.getStatus());
+                System.out.println("[DEBUG] UFinished truck seqnum: " + uFinished.getSeqnum());
+                System.out.println("--------------------------------------------------- ");
                 truckD.setStatus(uFinished.getStatus());
                 truckD.setX(uFinished.getX());
                 truckD.setY(uFinished.getY());
@@ -112,8 +124,11 @@ public class WorldListener implements Runnable {
                 session.save(truckD);
             }
 
+            //TODO: delete the ugopickup and ugodeleive by ack in Uresponse
+            List<Long> received_ack=uResponses.getAcksList();
+            
             transaction.commit();
-            session.close();
+            //session.close();
         }
     }
 }

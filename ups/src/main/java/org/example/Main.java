@@ -11,22 +11,37 @@ import org.hibernate.cfg.Configuration;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        MockAmazon mockAmazon = new MockAmazon("152.3.53.142", 9999);
-        mockAmazon.connectToWorld(mockAmazon.createUConnect(null, 10));
-        mockAmazon.sendAInformWorld();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        mockAmazon.sendABookTruck();
-        try {
-            Thread.sleep(60000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while (true) {
-        }
-        // mockAmazon.receiveUTruckArrived();
+        //UpsServer upsServer = new UpsServer(9999);
+        //upsServer.connectToWorld();
+
+        //sudo su - postgres
+        // psql
+        // ALTER USER postgres with encrypted password 'abc123';
+
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        // Step 1: Clear data from all tables
+        Transaction clearTransaction = session.beginTransaction();
+        session.createNativeQuery("DELETE FROM u_delivery_location").executeUpdate();
+        session.createNativeQuery("DELETE FROM u_go_deliver").executeUpdate();
+        session.createNativeQuery("DELETE FROM u_go_pickup").executeUpdate();
+        session.createNativeQuery("DELETE FROM u_query").executeUpdate();
+        session.createNativeQuery("DELETE FROM a_book_truck").executeUpdate();
+        session.createNativeQuery("DELETE FROM acks").executeUpdate();
+        session.createNativeQuery("DELETE FROM a_start_deliver").executeUpdate();
+        session.createNativeQuery("DELETE FROM package").executeUpdate();
+        session.createNativeQuery("DELETE FROM truck").executeUpdate();
+        clearTransaction.commit();
+
+
+        // 关闭 session 和 sessionFactory
+        session.close();
+
+        UpsServer upsServer = new UpsServer(9999, sessionFactory);
+        upsServer.start();
+        sessionFactory.close();
     }
 }

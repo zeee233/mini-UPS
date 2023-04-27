@@ -48,11 +48,6 @@ public class UpsServer {
         upsServerSocket.setSoTimeout(1200000);
 
         this.sessionFactory = sessionFactory;
-
-        worldListener = new WorldListener(worldSocket, sessionFactory);
-        worldSender = new WorldSender(worldSocket, sessionFactory);
-        amazonListener = new AmazonListener(amazonSocket, sessionFactory);
-        amazonSender = new AmazonSender(amazonSocket, sessionFactory);
     }
 
     // TODO: may remove to other file
@@ -100,22 +95,34 @@ public class UpsServer {
         try {
             // 1. waiting for amazon to connect
             amazonSocket = upsServerSocket.accept();
+            System.out.println("[DEBUG] Amazon connected");
             // 2. waiting for world id
             UReceivedWorld.Builder uReceivedWorld = UReceivedWorld.newBuilder();
-            CommHelper.recvMSG(uReceivedWorld, worldSocket);
+            CommHelper.recvMSG(uReceivedWorld, amazonSocket);
             worldID = uReceivedWorld.getWorldid();
+            System.out.println("[DEBUG] Received world id: " + worldID);
             // 3. connect to the world
             boolean connectResult = false;
             do {
                 connectResult = connectToWorld(createUConnect(worldID, 50));
             } while (!connectResult);
+            System.out.println("[DEBUG] Connected to the world");
             // TODO: remember to write the truck to the database
+
+            worldListener = new WorldListener(worldSocket, sessionFactory);
+            worldSender = new WorldSender(worldSocket, sessionFactory);
+            amazonListener = new AmazonListener(amazonSocket, sessionFactory);
+            amazonSender = new AmazonSender(amazonSocket, sessionFactory);
 
             // start world listener
             threadPool.execute(amazonListener);
             threadPool.execute(worldListener);
             threadPool.execute(worldSender);
             threadPool.execute(amazonSender);
+
+            while (true) {
+                // avoid main thread exit
+            }
 
         } catch (IOException e) {
             stop();

@@ -23,13 +23,14 @@ public class AmazonSender implements Runnable {
 
     @Override
     public void run() {
+        Session session = sessionFactory.openSession();
         while (true) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Session session = sessionFactory.openSession();
+
             UACommunication.Builder uaCommunication = UACommunication.newBuilder();
             //CommHelper.recvMSG(uaCommunication,amazonSocket);
             Transaction transaction = session.beginTransaction();
@@ -80,7 +81,7 @@ public class AmazonSender implements Runnable {
             }
             CommHelper.sendMSG(uaCommunication,amazonSocket);
             transaction.commit();
-
+            //session.close();
         }
 
     }

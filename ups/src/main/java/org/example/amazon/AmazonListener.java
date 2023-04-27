@@ -23,9 +23,10 @@ public class AmazonListener implements Runnable {
 
     @Override
     public void run() {
+        Session session = sessionFactory.openSession();
         while (true) {
 
-            Session session = sessionFactory.openSession();
+
             // receive response from amazon every 1s
             AUCommunication.Builder auCommunication = AUCommunication.newBuilder();
             CommHelper.recvMSG(auCommunication, amazonSocket);
@@ -41,6 +42,15 @@ public class AmazonListener implements Runnable {
                 int destinationX = bookTruck.getDestinationx();
                 int destinationY = bookTruck.getDestinationy();
                 String upsid = null;
+
+                System.out.println("[DEBUG] deal with ABookTruck");
+                System.out.println("[DEBUG] ABookTruck packageId: " + packageId);
+                System.out.println("[DEBUG] ABookTruck warehouseId: " + warehouseId);
+                System.out.println("[DEBUG] ABookTruck warehouseX: " + warehouseX);
+                System.out.println("[DEBUG] ABookTruck warehouseY: " + warehouseY);
+                System.out.println("[DEBUG] ABookTruck destinationX: " + destinationX);
+                System.out.println("[DEBUG] ABookTruck destinationY: " + destinationY);
+
                 if (bookTruck.hasUpsid()) {
                     upsid = bookTruck.getUpsid();
                 }
@@ -162,7 +172,7 @@ public class AmazonListener implements Runnable {
                 transaction.commit();
             }
 
-            session.close();
+            //session.close();
         }
     }
 }

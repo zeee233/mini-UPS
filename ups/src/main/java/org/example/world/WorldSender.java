@@ -25,9 +25,10 @@ public class WorldSender implements Runnable {
 
     @Override
     public void run() {
+        Session session = sessionFactory.openSession();
         while (true) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -35,9 +36,7 @@ public class WorldSender implements Runnable {
             // create new Ucommands
             UCommands.Builder uCommands = UCommands.newBuilder();
 
-            Session session = sessionFactory.openSession();
             Transaction transaction = session.beginTransaction();
-
             // 1. first search UGoPickup
             List<UGoPickupD> allUGoPickups = session.createQuery("FROM UGoPickupD", UGoPickupD.class).getResultList();
             // for every record in UGoPickUp table, make it as uGoPickUp and add it to
@@ -94,8 +93,15 @@ public class WorldSender implements Runnable {
             uCommands.addAllAcks(allAcks);
 
             // 4. send uCommands to world
+            if(uCommands.getPickupsCount()<=0 && uCommands.getDeliveriesCount()<=0 && uCommands.getAcksCount()<=0 && uCommands.getQueriesCount()<=0){
+                transaction.commit();//useless
+                continue;
+            }
             CommHelper.sendMSG(uCommands, worldSocket);
-
+            System.out.println("----------World Sender---------------------");
+            System.out.println("u_go_pickup count:"+uCommands.getPickupsCount());
+            System.out.println(uCommands.getPickupsList());
+            System.out.println("------------------------------------------");
             // TODO: maybe move to other file to only deal with table
             // delete acks from table
             for (ResendACKsD record : allResendAcks) {
@@ -105,7 +111,8 @@ public class WorldSender implements Runnable {
 
             // TODO: optional: UQuery??
 
-            session.close();
+
         }
+        //session.close();
     }
 }
