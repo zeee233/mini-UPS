@@ -31,6 +31,7 @@ CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.
 # Application definition
 
 INSTALLED_APPS = [
+    'ups.apps.UpsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
