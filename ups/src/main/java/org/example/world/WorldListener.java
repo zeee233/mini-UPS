@@ -75,7 +75,7 @@ public class WorldListener implements Runnable {
                 System.out.println("[DEBUG] UFinished truck status: " + uFinished.getStatus());
                 System.out.println("[DEBUG] UFinished truck seqnum: " + uFinished.getSeqnum());
                 System.out.println("--------------------------------------------------- ");
-                truckD.setStatus(uFinished.getStatus());
+                truckD.setStatus(uFinished.getStatus().toLowerCase());
                 truckD.setX(uFinished.getX());
                 truckD.setY(uFinished.getY());
                 session.save(truckD);
@@ -122,6 +122,12 @@ public class WorldListener implements Runnable {
                 truckD.setX(packageD.getDestinationX());
                 truckD.setY(packageD.getDestinationY());
                 session.save(truckD);
+
+                System.out.println("---------------World Listener---------------------- ");
+                System.out.println("[DEBUG] uDeliveryMade truck id: " + uDeliveryMade.getTruckid());
+                System.out.println("[DEBUG] uDeliveryMade package id: " + uDeliveryMade.getPackageid());
+                System.out.println("[DEBUG] uDeliveryMade seqnum: " + uDeliveryMade.getSeqnum());
+                System.out.println("--------------------------------------------------- ");
             }
 
             //3. delete the UGoPickupD and UGoDeliverD by ack in uResponses
