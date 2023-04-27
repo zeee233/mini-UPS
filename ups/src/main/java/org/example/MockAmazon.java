@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import org.example.protoc.UpsAmazon.ABookTruck;
-import org.example.protoc.UpsAmazon.AInformWorld;
-import org.example.protoc.UpsAmazon.UTruckArrived;
+import org.example.protoc.UpsAmazon.*;
 import org.example.protoc.WorldAmazon.*;
 import org.example.utils.CommHelper;
 
@@ -17,9 +15,9 @@ public class MockAmazon {
     private Socket worldSocket;
     private long worldID;
 
-    public MockAmazon(int port) throws UnknownHostException, IOException {
-        worldSocket = new Socket("127.0.0.1", WORLD_PORT);
-        upsSocket = new Socket("127.0.0.1", port);
+    public MockAmazon(String host, int port) throws UnknownHostException, IOException {
+        worldSocket = new Socket(host, WORLD_PORT);
+        upsSocket = new Socket(host, port);
     }
 
     public AConnect.Builder createUConnect(Long worldID, int whNum) {
@@ -53,9 +51,10 @@ public class MockAmazon {
     }
 
     public void sendAInformWorld() {
-        AInformWorld.Builder aInformWorld = AInformWorld.newBuilder();
+        UReceivedWorld.Builder aInformWorld = UReceivedWorld.newBuilder();
         aInformWorld.setWorldid(worldID);
         CommHelper.sendMSG(aInformWorld, upsSocket);
+        System.out.println("[DEBUG] Send world id to ups");
     }
 
     public void sendABookTruck() {
@@ -70,14 +69,17 @@ public class MockAmazon {
         aBookTruck.setUpsid("7");
         aBookTruck.setDetail("This is detail");
 
-        CommHelper.sendMSG(aBookTruck, upsSocket);
+        AUCommunication.Builder auCommunication = AUCommunication.newBuilder();
+        auCommunication.addBookings(aBookTruck);
+        CommHelper.sendMSG(auCommunication, upsSocket);
+        System.out.println("ups socket: "+upsSocket);
     }
 
     public void receiveUTruckArrived() {
-        UTruckArrived.Builder uTruckArrived = UTruckArrived.newBuilder();
-        CommHelper.recvMSG(uTruckArrived, upsSocket);
-        System.out.println("Packageid: " + uTruckArrived.getPackageid());
-        System.out.println("Truckid: " + uTruckArrived.getTruckid());
+        // UACommunication.Builder uaCommunication = UACommunication.newBuilder();
+        // CommHelper.recvMSG(uaCommunication, upsSocket);
+        // System.out.println("Packageid: " + uTruckArrived.getPackageid());
+        // System.out.println("Truckid: " + uTruckArrived.getTruckid());
     }
 
     public void stop() {

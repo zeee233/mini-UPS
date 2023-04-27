@@ -11,7 +11,7 @@ import org.hibernate.cfg.Configuration;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        MockAmazon mockAmazon = new MockAmazon(9999);
+        MockAmazon mockAmazon = new MockAmazon("152.3.53.142", 9999);
         mockAmazon.connectToWorld(mockAmazon.createUConnect(null, 10));
         mockAmazon.sendAInformWorld();
         try {
@@ -20,6 +20,13 @@ public class Main {
             e.printStackTrace();
         }
         mockAmazon.sendABookTruck();
-        mockAmazon.receiveUTruckArrived();
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (true) {
+        }
+        // mockAmazon.receiveUTruckArrived();
     }
 }
