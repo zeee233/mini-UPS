@@ -15,4 +15,6 @@ class PackageD(models.Model):
     truck_id = models.IntegerField(null=True, blank=True)
     detail = models.TextField(null=True, blank=True)
     class Meta:
+        managed = False
         db_table = 'package'
+        app_label = 'ups'
