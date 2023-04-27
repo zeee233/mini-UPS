@@ -53,6 +53,12 @@ public class WorldSender implements Runnable {
                         .setParameter("truckId", truckid).uniqueResult();
                 truckD.setStatus("traveling");
                 session.save(truckD);
+
+                System.out.println("---------------World Sender---------------------- ");
+                System.out.println("[DEBUG] uGoPickUp truck id: " + uGoPickUp.getTruckid());
+                System.out.println("[DEBUG] uGoPickUp warehouse id: " + uGoPickUp.getWhid());
+                System.out.println("[DEBUG] uGoPickUp truck seqnum: " + uGoPickUp.getSeqnum());
+                System.out.println("--------------------------------------------------- ");
             }
 
             // 2. then search UGoDeliver
@@ -83,6 +89,12 @@ public class WorldSender implements Runnable {
                         .setParameter("truckId", truckid).uniqueResult();
                 truckD.setStatus("delivering");
                 session.save(truckD);
+
+                System.out.println("---------------World Sender---------------------- ");
+                System.out.println("[DEBUG] uGoDeliver truck id: " + uGoDeliver.getTruckid());
+                System.out.println("[DEBUG] uGoDeliver package list: " + uGoDeliver.getPackagesList());
+                System.out.println("[DEBUG] uGoDeliver truck seqnum: " + uGoDeliver.getSeqnum());
+                System.out.println("--------------------------------------------------- ");
             }
 
             // 3. add acks from Resend table

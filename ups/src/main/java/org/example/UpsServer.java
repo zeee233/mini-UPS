@@ -41,7 +41,7 @@ public class UpsServer {
 
     public UpsServer(int port, SessionFactory sessionFactory) throws IOException {
         upsServerSocket = new ServerSocket(port);
-        worldSocket = new Socket("127.0.0.1", WORLD_PORT);
+        worldSocket = new Socket("vcm-31112.vm.duke.edu", WORLD_PORT);
 
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         threadPool = new ThreadPoolExecutor(20, 20, 100, TimeUnit.SECONDS, workQueue);
@@ -97,9 +97,9 @@ public class UpsServer {
             amazonSocket = upsServerSocket.accept();
             System.out.println("[DEBUG] Amazon connected");
             // 2. waiting for world id
-            UReceivedWorld.Builder uReceivedWorld = UReceivedWorld.newBuilder();
-            CommHelper.recvMSG(uReceivedWorld, amazonSocket);
-            worldID = uReceivedWorld.getWorldid();
+            AInformWorld.Builder aInformWorld = AInformWorld.newBuilder();
+            CommHelper.recvMSG(aInformWorld, amazonSocket);
+            worldID = aInformWorld.getWorldid();
             System.out.println("[DEBUG] Received world id: " + worldID);
             // 3. connect to the world
             boolean connectResult = false;
