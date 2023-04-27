@@ -124,7 +124,7 @@ public class WorldListener implements Runnable {
                 session.save(truckD);
             }
 
-            //delete the UGoPickupD and UGoDeliverD by ack in uResponses
+            //3. delete the UGoPickupD and UGoDeliverD by ack in uResponses
             for(Long ack : uResponses.getAcksList()){
                 UGoPickupD pickupToDelete = session.createQuery("FROM UGoPickupD WHERE seqNum = :seqNum", UGoPickupD.class)
                         .setParameter("seqNum", ack).uniqueResult();
