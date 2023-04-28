@@ -47,3 +47,6 @@ def sign_up(request):
             return render(request, 'sign_up.html', {'error': 'Passwords do not match'})
     elif(request.method=="GET"):
         return render(request, 'sign_up.html')
+
+def main_page(request):
+    return render(request, 'main_page.html')
