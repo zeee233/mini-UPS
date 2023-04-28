@@ -1,5 +1,6 @@
 package org.example.amazon;
 
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +27,6 @@ public class AmazonListener implements Runnable {
     public void run() {
         Session session = sessionFactory.openSession();
         while (true) {
-
             // receive response from amazon every 1s
             AUCommunication.Builder auCommunication = AUCommunication.newBuilder();
             CommHelper.recvMSG(auCommunication, amazonSocket);
