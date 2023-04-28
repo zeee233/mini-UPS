@@ -12,6 +12,7 @@ public class CommHelper {
             codedOutputStream.writeUInt32NoTag(builder.build().toByteArray().length);
             builder.build().writeTo(codedOutputStream);
             codedOutputStream.flush();
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();

@@ -24,6 +24,7 @@ test {
     useJUnitPlatform()
 }
 
-// tasks.register("run", JavaExec) {
-//     mainClassName = 'org.example.Main'
-// }
+tasks.register("run", JavaExec) {
+    main = 'org.example.Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
