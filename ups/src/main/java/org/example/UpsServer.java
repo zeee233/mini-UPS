@@ -64,13 +64,13 @@ public class UpsServer {
             truck.build();
             connectToWorld.addTrucks(truck);
 
-            //insert into the Truck table
+            // insert into the Truck table
             TruckD cur_truck = new TruckD();
-            cur_truck.setTruckId(i);
+            cur_truck.setTruckId(i + 1);
             cur_truck.setX(0);
             cur_truck.setY(0);
             cur_truck.setStatus("idle");
-            Transaction transaction=session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
             session.save(cur_truck);
             transaction.commit();
         }
