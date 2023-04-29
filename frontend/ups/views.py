@@ -50,3 +50,6 @@ def sign_up(request):
 
 def main_page(request):
     return render(request, 'main_page.html')
+
+def search_packages(request):
+    return render(request, 'search_packages.html')
