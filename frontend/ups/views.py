@@ -53,3 +53,26 @@ def main_page(request):
 
 def search_packages(request):
     return render(request, 'search_packages.html')
+
+
+def search_package_id(request):
+    records = None
+    if request.method=="POST":
+        packageID = request.POST["packageid"]
+        records = PackageD.objects.filter(package_id=packageID)
+        print(records)
+        return render(request, 'search_packages.html', {'records': records})
+    return render(request, 'search_packages.html', {'records': records})
+
+
+def package_info(request):
+    packageid = request.GET.get('package_id')
+    package = PackageD.objects.get(package_id=packageid)
+
+    # if request.method=="POST":
+        # TODO zhihao remember to write this!!!
+        # write
+        # 
+    
+    return render(request, 'package_info.html', {'package': package})
+

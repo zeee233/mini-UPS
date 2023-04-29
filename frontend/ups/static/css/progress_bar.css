@@ -1,0 +1,42 @@
+.circle {
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 2px solid #000;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.status {
+    position: absolute;
+    bottom: -25px;
+    left: -50%;
+    width: 100px;
+    padding: 5px;
+    background-color: #000;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    z-index: 2;
+}
+
+.circle:hover .status {
+    visibility: visible;
+    opacity: 1;
+}
+
+.line {
+    border-top: 2px solid #000;
+    height: 15px;
+    margin: 0 auto;
+}
+
+@media (min-width: 576px) {
+    .line {
+        margin-top: 16px;
+        height: 60px;
+    }
+}
