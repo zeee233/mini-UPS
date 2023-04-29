@@ -18,3 +18,21 @@ class PackageD(models.Model):
         managed = False
         db_table = 'package'
         app_label = 'ups'
+
+class UGoDeliverD(models.Model):
+    truck_id = models.IntegerField(null=False)
+    seq_num = models.BigIntegerField(null=False)
+    class Meta:
+        managed = False
+        db_table = 'u_go_deliver'
+        app_label = 'ups'
+
+class UDeliveryLocationD(models.Model):
+    package_id = models.BigIntegerField(null=False)
+    x = models.IntegerField(null=False)
+    y = models.IntegerField(null=False)
+    u_go_deliver = models.ForeignKey(UGoDeliverD, on_delete=models.CASCADE, related_name='packages')
+    class Meta:
+        managed = False
+        db_table = 'u_delivery_location'
+        app_label = 'ups'
