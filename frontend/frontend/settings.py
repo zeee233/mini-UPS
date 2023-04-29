@@ -25,11 +25,11 @@ SECRET_KEY = 'django-insecure-%!^==1i39o+1+_$8cj7c%w3sf#5qvzn=i@*_)5=gmidd$94j_z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'vcm-30481.vm.duke.edu', 'localhost']
+ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.localhost:8000']
 
 # Application definition
-
+SITE_ID = 2
 INSTALLED_APPS = [
     'ups.apps.UpsConfig',
     'django.contrib.admin',
@@ -39,7 +39,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap5',
+
+    # for google sign in 
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.apple',
 ]
+
+# ROOT_URLCONF= 'googlelogin.urls'
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -87,6 +99,18 @@ DATABASES = {
 }
 
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -127,3 +151,20 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
+#if there are diffrent pages that need to redirect, change it
+LOGIN_REDIRECT_URL="/"
+LOGOUT_REDIRECT_URL="/"
+
+# SECURE_SSL_REDIRECT = True #enfore https
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1095443399655-8uc6sn6m2g042unacofqs9ou971gakmg.apps.googleusercontent.com'
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
