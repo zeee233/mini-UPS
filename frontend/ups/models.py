@@ -36,3 +36,10 @@ class UDeliveryLocationD(models.Model):
         managed = False
         db_table = 'u_delivery_location'
         app_label = 'ups'
+
+class SeqNumD(models.Model):
+    seq_num = models.BigIntegerField(null=False)
+    class Meta:
+        managed = False
+        db_table = 'seqnum'
+        app_label = 'ups'    

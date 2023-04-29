@@ -34,6 +34,7 @@ public class Main {
         session.createNativeQuery("DELETE FROM a_start_deliver").executeUpdate();
         session.createNativeQuery("DELETE FROM package").executeUpdate();
         session.createNativeQuery("DELETE FROM truck").executeUpdate();
+        session.createNativeQuery("DELETE FROM seqnum").executeUpdate();
         clearTransaction.commit();
 
         // 关闭 session 和 sessionFactory

@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password
+from django.db import transaction
+from django.db.models import Max
 
 from .models import *
 
@@ -66,13 +68,56 @@ def search_package_id(request):
 
 
 def package_info(request):
-    packageid = request.GET.get('package_id')
-    package = PackageD.objects.get(package_id=packageid)
+    if request.method == "GET":
+        packageid = request.GET.get('package_id')
+        print("packageid: ",packageid)
+        package = PackageD.objects.get(package_id=packageid)
 
-    # if request.method=="POST":
-        # TODO zhihao remember to write this!!!
-        # write
-        # 
+    if request.method == "POST":
+        destination_x = int(request.POST["destination_x"])
+        destination_y = int(request.POST["destination_y"])
+
+        packageid = request.POST["package_id"]
+        package = PackageD.objects.get(package_id=packageid)
+        if package.status == "delivering":
+            with transaction.atomic():
+                try:
+                    u_delivery_location = UDeliveryLocationD.objects.select_for_update().get(package_id=packageid)
+
+                    # Update the existing UDeliveryLocationD record
+                    u_delivery_location.x = destination_x
+                    u_delivery_location.y = destination_y
+                    u_delivery_location.save()
+
+                except UDeliveryLocationD.DoesNotExist:
+                    pass
+
+                # Find the max seq_num in the database and lock the SeqNumD table
+                max_seq_num_entry = SeqNumD.objects.select_for_update().aggregate(Max('seq_num'))
+                max_seq_num = max_seq_num_entry['seq_num__max']
+
+                # Increment seq_num by 1
+                if max_seq_num is not None:
+                    new_seq_num = max_seq_num + 1
+                else:
+                    new_seq_num = 1
+
+                # Save the new seq_num in the SeqNumD table
+                seq_num_entry = SeqNumD(seq_num=new_seq_num)
+                seq_num_entry.save()
+
+                # Create new UGoDeliverD and UDeliveryLocationD records
+                u_go_deliver = UGoDeliverD(truck_id=package.truck_id, seq_num=new_seq_num)
+                u_go_deliver.save()
+
+                u_delivery_location = UDeliveryLocationD(package_id=packageid, x=destination_x, y=destination_y, u_go_deliver=u_go_deliver)
+                u_delivery_location.save()
+
+                package.destination_x = destination_x
+                package.destination_y = destination_y
+                package.save()
+        # Redirect to the same page to avoid resubmitting the form
+        return render(request, 'package_info.html', {'package': package})
     
     return render(request, 'package_info.html', {'package': package})
 
