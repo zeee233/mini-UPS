@@ -39,7 +39,7 @@ public class Main {
         // 关闭 session 和 sessionFactory
         session.close();
 
-        UpsServer upsServer = new UpsServer(22222, sessionFactory);
+        UpsServer upsServer = new UpsServer(22222, "vcm-31112.vm.duke.edu", sessionFactory);
         upsServer.start();
         sessionFactory.close();
 

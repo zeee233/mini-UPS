@@ -22,8 +22,7 @@
         <div class="col-lg-18 mx-auto">
             <div class="career-search mb-60">
 
-                <form method="post" action="/search_package_id/" class="career-form2 mb-60 needs-validation"
-                    novalidate>
+                <form method="post" action="/search_package_id/" class="career-form2 mb-60 needs-validation" novalidate>
                     {% csrf_token %}
 
                     <!-- change -->
@@ -62,23 +61,19 @@
                             </div>
                             <div class="job-content">
                                 <ul class="d-md-flex flex-wrap ff-open-sans">
-                                    <li class="mr-md-8 mb-md-1" style="margin-right: 3em;">
-                                        <i class="zmdi zmdi-pin mr-2"></i> <span class="record-text">{{
-                                            record.status}}</span>
+                                    <li class="mr-md-8" style="margin-right: 3em;">
+                                        <i class="zmdi zmdi-time mr-2"></i> <span class="record-text">
+                                            truck_id: {{record.truck_id}}</span>
                                     </li>
                                     <li class="mr-md-8" style="margin-right: 3em;">
-                                        <i class="zmdi zmdi-time mr-2"></i> <span class="record-text">{{
-                                            record.truck_id}}</span>
-                                    </li>
-                                    <li class="mr-md-8" style="margin-right: 3em;">
-                                        <i class="zmdi zmdi-alert-circle-o mr-2"></i> <span class="record-text">{{
-                                            record.status}}</span>
+                                        <i class="zmdi zmdi-alert-circle-o mr-2"></i> <span class="record-text">
+                                            status: {{record.status}}</span>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="job-right my-4 flex-shrink-0">
-                            <a href="{% url 'join_ride' %}?ride_id={{ record.id }}&num_pax_sharer={{ num_pax_sharer }}"
+                            <a href="{% url 'package_info' %}?package_id={{ record.package_id }}"
                                 class="btn d-block w-100 d-sm-inline-block btn-light">More Info</a>
                         </div>
                     </div>

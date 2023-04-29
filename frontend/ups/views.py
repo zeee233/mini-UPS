@@ -19,7 +19,7 @@ def sign_in(request):
         if user is not None and check_password(password, user.password):
             login(request, user)
 
-            return render(request, 'ride_request.html', {'user': user})
+            return render(request, 'search_packages.html', {'user': user})
         else:
             print("////")
             return render(request, 'sign_in.html', {'error': 'Email does not exist or password is incorrect!'})
@@ -49,7 +49,7 @@ def sign_up(request):
         return render(request, 'sign_up.html')
 
 def main_page(request):
-    return render(request, 'main_page.html')
+    return render(request, 'search_packages.html')
 
 def search_packages(request):
     return render(request, 'search_packages.html')
@@ -76,3 +76,19 @@ def package_info(request):
     
     return render(request, 'package_info.html', {'package': package})
 
+def account_info(request):
+    user = User.objects.get(email=request.user.email)
+
+    return render(request, 'account_info.html', {'user': user})
+
+
+def user_packages(request):
+    user = User.objects.get(email=request.user.email)
+    name = user.username
+    records = PackageD.objects.filter(ups_id=name)
+
+    return render(request, 'user_packages.html', {'records': records})
+
+def sign_out(request):
+    logout(request)
+    return redirect('/')

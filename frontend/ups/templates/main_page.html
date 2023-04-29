@@ -71,7 +71,13 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="headers.css" rel="stylesheet">
+    <link href="{% static 'css/headers.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/sidebars.css' %}" rel="stylesheet"> -->
+    <!-- <link href="{% static 'css/checkout.css' %}" rel="stylesheet"> -->
+    <link href="{% static 'css/signin.css' %}" rel="stylesheet">
+    <link href="{% static 'css/showlist.css' %}" rel="stylesheet">
+    <!-- <link href="{% static 'css/sign-in.css' %}" rel="stylesheet"> -->
+
 </head>
 
 <body>
@@ -126,8 +132,13 @@
                     <li class="nav-item"><a href="#" class="nav-link link-dark px-2">About</a></li>
                 </ul>
                 <ul class="nav">
-                    <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Login</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link link-dark px-2">Sign up</a></li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a href="{% url 'account_info' %}" class="nav-link link-dark px-2">My Center</a></li>
+                    <li class="nav-item"><a href="{% url 'sign_out' %}" class="nav-link link-dark px-2">Log out</a></li>
+                    {% else %}
+                    <li class="nav-item"><a href="{% url 'sign_in' %}" class="nav-link link-dark px-2">Login</a></li>
+                    <li class="nav-item"><a href="{% url 'sign_up' %}" class="nav-link link-dark px-2">Sign up</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>

@@ -117,7 +117,7 @@ public class AmazonListener implements Runnable {
                 newPackage.setStatus("packed");
                 Transaction transaction1 = session.beginTransaction();
                 session.save(newPackage);
-                closestTruck.setStatus("travelling");
+                closestTruck.setStatus("traveling");
                 session.save(closestTruck);
                 transaction1.commit();
 
