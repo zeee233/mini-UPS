@@ -1,0 +1,71 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Google Sign In</title>
+</head>
+<body>
+    {% load socialaccount %}
+    <h2>Google Login</h2>
+    <a href="{% provider_login_url 'google' %}?next=/">Login with Google</a>
+</body>
+</html> -->
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="https://f664-152-3-53-142.ngrok-free.app/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+    <!-- Google Sign In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <div id="g_id_onload" data-client_id="1095443399655-h2acin3427l5s80bl3ui4hq4feqepn2h.apps.googleusercontent.com"
+        data-auto_prompt="false" data-callback="handleCredentialResponse">
+    </div>
+    <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with"
+        data-shape="rectangular" data-logo_alignment="left">
+    </div>
+    <script>
+        function handleCredentialResponse(response) {
+            fetch('https://localhost:8080/handle_google_login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_token: response.credential })
+            })
+                .then(response => {
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        console.log('if true: ', data);
+                        //window.location.href = "http://www.thymeleaf.org";
+                        window.location.assign("https://localhost:8080/main?name=" + encodeURIComponent(data.name));
+                    } else {
+                        window.location.href = "/loginFailure";
+                    }
+                });
+        }
+    </script>
+    <!-- Apple Sign In -->
+    <script>
+        function signInWithApple() {
+            const clientId = 'com.localtest.cosmeticswebsite.signinwithapple';
+            const redirectUri = encodeURIComponent('https://f664-152-3-53-142.ngrok-free.app/handle_apple_login');
+            const responseType = 'code id_token';
+            const scope = encodeURIComponent('name email');
+
+            const appleAuthUrl = `https://appleid.apple.com/auth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&response_mode=form_post`;
+
+            window.location.href = appleAuthUrl;
+        }
+    </script>
+
+    <button onclick="signInWithApple()">Sign in with Apple</button>
+
+</body>
+</html>
