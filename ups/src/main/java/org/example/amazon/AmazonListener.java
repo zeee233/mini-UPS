@@ -117,6 +117,8 @@ public class AmazonListener implements Runnable {
                 newPackage.setStatus("packed");
                 Transaction transaction1 = session.beginTransaction();
                 session.save(newPackage);
+                closestTruck.setStatus("travelling");
+                session.save(closestTruck);
                 transaction1.commit();
 
                 // insert the uGoPickup table
