@@ -41,7 +41,7 @@ public class UpsServer {
 
     public UpsServer(int port, SessionFactory sessionFactory) throws IOException {
         upsServerSocket = new ServerSocket(port);
-        worldSocket = new Socket("vcm-31112.vm.duke.edu", WORLD_PORT);
+        worldSocket = new Socket("vcm-33606.vm.duke.edu", WORLD_PORT);
 
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         threadPool = new ThreadPoolExecutor(20, 20, 100, TimeUnit.SECONDS, workQueue);
