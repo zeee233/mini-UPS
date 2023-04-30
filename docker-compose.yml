@@ -18,6 +18,7 @@ services:
         - db
   web:
       build: ./frontend
+      hostname: 127.0.0.1
       user: nobody
       command: /code/runserver.sh
       volumes:

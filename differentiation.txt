@@ -1,0 +1,33 @@
+1. Implemented Google sign in.
+    Implement Google Sign-In on the front-end:
+    a. Follow the official guide to set up a Google Sign-In button on your front-end.
+    b. Once the user is signed in with Google, get the ID token from the gapi.auth2 library.
+
+Authenticate with the back-end:
+    a. Send a request to your back-end API with the Google ID token in the request body.
+    b. In the back-end, verify the Google ID token, extract user information, and create or update the user in your database.
+    c. If the token is valid, generate a JWT token and return it to the front-end.
+
+Use the JWT token in subsequent API requests:
+    Store the JWT token in your front-end application (e.g., in memory or local storage), and include it in the Authorization header of subsequent API requests to your back-end.
+
+2. Implemented Apple sign in.
+Apple responds with an Identity Token, Authorization Code, and User Identifier: 
+    When a user successfully authenticates with Apple, Apple's authorization server sends back an Identity Token, Authorization Code, and User Identifier to the client application (frontend).
+
+Frontend sends the obtained information to the backend: 
+    The client application (frontend) sends the received Identity Token, Authorization Code, and User Identifier to the backend server for further processing and validation.
+
+Backend verifies the Identity Token using Apple's public key: 
+    The backend server retrieves the public key from Apple's servers and uses it to verify the authenticity of the received Identity Token. This ensures that the token was genuinely issued by Apple and has not been tampered with.
+
+Backend extracts user information from the Identity Token using the JWT (JSON Web Token) standard: 
+    The backend server decodes the Identity Token, which is a JWT, to extract the user's information, such as email and name. JWTs have three parts: a header, a payload, and a signature. The payload contains the user's information and is encoded using the HS256 algorithm. By decoding the payload, the backend can access the user's email and name.
+
+3. User-friendly UI/UX.
+
+4. Microservice design in backend.
+
+5. Associate Amazon account with your UPS account.
+
+6. Truck dynamic allocation. Use operation research to allocate the truck.
