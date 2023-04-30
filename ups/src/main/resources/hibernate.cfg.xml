@@ -22,6 +22,7 @@
         <mapping class="org.example.domain.UGoDeliverD"/>
         <mapping class="org.example.domain.UGoPickupD"/>
         <mapping class="org.example.domain.UQueryD"/>
+        <mapping class="org.example.domain.SeqNumD"/>
 
     </session-factory>
 </hibernate-configuration>

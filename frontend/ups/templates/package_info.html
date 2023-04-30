@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="bg-light">
-    
-<div class="container">
+
+  <div class="container">
     <div class="py-5 text-center">
       <img class="d-block mx-auto mb-4" src="https://i.ibb.co/sWrdktY/investigation.png" alt="" width="72" height="57">
       <h2>Request a Ride</h2>
@@ -14,95 +14,105 @@
     <div class="row g-5">
 
       {% if success_message %}
-        <div class="alert alert-success" role="alert">
-          {{ success_message }}
-        </div>
+      <div class="alert alert-success" role="alert">
+        {{ success_message }}
+      </div>
       {% endif %}
 
       <div class="col-md-12 col-lg-12">
         <h4 class="mb-3">Package info</h4>
         <hr class="my-4">
-        <form method="post" action="/join_ride/">
+        <form method="post" action="/package_info/">
           {% csrf_token %}
           <div class="row g-3">
 
             <div class="col-12">
-                <label for="packageid" class="form-label">Package ID</label>
-                <div class="input-group has-validation">
-                  <input type="text" class="form-control" id="packageid" name="packageid" readonly required value="{{ package.package_id }}">
-                </div>
+              <label for="packageid" class="form-label">Package ID</label>
+              <div class="input-group has-validation">
+                <input type="text" class="form-control" id="packageid" name="packageid" readonly required
+                  value="{{ package.package_id }}">
               </div>
+            </div>
 
-            
+
 
             <div class="col-12">
-                <label for="warehouse_id" class="form-label">Warehouse ID</label>
-                <input type="text" class="form-control" id="warehouse_id" name="warehouse_id" readonly required value="{{ package.warehouse_id }}">
+              <label for="warehouse_id" class="form-label">Warehouse ID</label>
+              <input type="text" class="form-control" id="warehouse_id" name="warehouse_id" readonly required
+                value="{{ package.warehouse_id }}">
             </div>
 
             <div class="col-12">
-                <label for="warehouse_x" class="form-label">Warehouse X Coordinate</label>
-                <input type="number" class="form-control" id="warehouse_x" name="warehouse_x" readonly required value="{{ package.warehouse_x }}">
+              <label for="warehouse_x" class="form-label">Warehouse X Coordinate</label>
+              <input type="number" class="form-control" id="warehouse_x" name="warehouse_x" readonly required
+                value="{{ package.warehouse_x }}">
             </div>
 
             <div class="col-12">
-                <label for="warehouse_y" class="form-label">Warehouse Y Coordinate</label>
-                <input type="number" class="form-control" id="warehouse_y" name="warehouse_y" readonly required value="{{ package.warehouse_y }}">
+              <label for="warehouse_y" class="form-label">Warehouse Y Coordinate</label>
+              <input type="number" class="form-control" id="warehouse_y" name="warehouse_y" readonly required
+                value="{{ package.warehouse_y }}">
             </div>
 
             <div class="col-12">
-                <label for="destination_x" class="form-label">Destination X Coordinate</label>
-                <input type="number" class="form-control" id="destination_x" name="destination_x" required value="{{ package.destination_x }}">
+              <label for="destination_x" class="form-label">Destination X Coordinate</label>
+              <input type="number" class="form-control" id="destination_x" name="destination_x" required
+                value="{{ package.destination_x }}">
             </div>
 
             <div class="col-12">
-                <label for="destination_y" class="form-label">Destination Y Coordinate</label>
-                <input type="number" class="form-control" id="destination_y" name="destination_y" required value="{{ package.destination_y }}">
+              <label for="destination_y" class="form-label">Destination Y Coordinate</label>
+              <input type="number" class="form-control" id="destination_y" name="destination_y" required
+                value="{{ package.destination_y }}">
             </div>
 
             <div class="col-12">
-                <label for="status" class="form-label">Status</label>
-                <input type="text" class="form-control" id="status" name="status" readonly required value="{{ package.status }}">
+              <label for="status" class="form-label">Status</label>
+              <input type="text" class="form-control" id="status" name="status" readonly required
+                value="{{ package.status }}">
             </div>
 
             <div class="col-12">
-                <label for="truck_id" class="form-label">Truck ID</label>
-                <input type="number" class="form-control" id="truck_id" name="truck_id" readonly required value="{{ package.truck_id }}">
+              <label for="truck_id" class="form-label">Truck ID</label>
+              <input type="number" class="form-control" id="truck_id" name="truck_id" readonly required
+                value="{{ package.truck_id }}">
             </div>
 
             <div class="col-12">
               <label for="detail" class="form-label">Package Detail</label>
-              <textarea cols="40" rows="10" class="form-control" id="detail" name="detail" readonly required>{{ package.detail }}</textarea>
+              <textarea cols="40" rows="10" class="form-control" id="detail" name="detail" readonly required>
+                {{ package.detail }}</textarea>
             </div>
 
             <input type="hidden" name="package_id" value="{{ package.package_id }}">
 
-          <hr class="my-4">
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-4" style="margin-right: 17rem;">
-                {% if package.status == "delivering" %}
-                <button class="w-100 btn btn-primary btn-lg" type="submit" name="quit_submit">Edit Destination</button>
-                {% endif %}
-              </div>
-              <div class="col-4 float-right">
-                <a class="w-100 btn btn-primary btn-lg" href="{% url 'search_packages' %}">Back to Previous Page</a>
+            <hr class="my-4">
+
+            <div class="container">
+              <div class="row">
+                <div class="col-4" style="margin-right: 17rem;">
+                  {% if package.status == "delivering" %}
+                  <button class="w-100 btn btn-primary btn-lg" type="submit" name="quit_submit">Edit
+                    Destination</button>
+                  {% endif %}
+                </div>
+                <div class="col-4 float-right">
+                  <a class="w-100 btn btn-primary btn-lg" href="{% url 'search_packages' %}">Back to Previous Page</a>
+                </div>
               </div>
             </div>
-          </div>
 
         </form>
       </div>
     </div>
 
-  <div class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017-2022 Hungryyyyyyyyy!</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-</div>
+    <div class="my-5 pt-5 text-muted text-center text-small">
+      <p class="mb-1">&copy; 2017-2022 Hungryyyyyyyyy!</p>
+      <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+      </ul>
+    </div>
 
-{% endblock %}
+    {% endblock %}

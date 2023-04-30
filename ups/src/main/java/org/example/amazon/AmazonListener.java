@@ -127,7 +127,7 @@ public class AmazonListener implements Runnable {
                 newGoPickup.setTruckId(closestTruck.getTruckId());
                 newGoPickup.setWhId(warehouseId);
 
-                newGoPickup.setSeqNum(SeqNumGenerator.generateSeqNum());
+                newGoPickup.setSeqNum(SeqNumGenerator.generateSeqNum(sessionFactory));
 
                 Transaction transaction2 = session.beginTransaction();
                 session.save(newGoPickup);
@@ -168,7 +168,7 @@ public class AmazonListener implements Runnable {
                 // Create UGoDeliverD
                 UGoDeliverD uGoDeliverD = new UGoDeliverD();
                 uGoDeliverD.setTruckId(truckId);
-                uGoDeliverD.setSeqNum(SeqNumGenerator.generateSeqNum());
+                uGoDeliverD.setSeqNum(SeqNumGenerator.generateSeqNum(sessionFactory));
 
                 Transaction transaction = session.beginTransaction();
 

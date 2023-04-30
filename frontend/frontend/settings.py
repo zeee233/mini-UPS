@@ -26,10 +26,10 @@ SECRET_KEY = 'django-insecure-%!^==1i39o+1+_$8cj7c%w3sf#5qvzn=i@*_)5=gmidd$94j_z
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.localhost:8000','https://a16a-152-3-53-142.ngrok-free.app']
 
 # Application definition
-SITE_ID = 2
+SITE_ID = 3
 INSTALLED_APPS = [
     'ups.apps.UpsConfig',
     'django.contrib.admin',
@@ -108,8 +108,35 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         }
+    },
+    "apple": {
+        "APP": {
+            # Your service identifier.
+            "client_id": "com.localtest.cosmeticswebsite.signinwithapple",
+
+            # The Key ID (visible in the "View Key Details" page).
+            "secret": "F28BBAKJ84",
+
+             # Member ID/App ID Prefix -- you can find it below your name
+             # at the top right corner of the page, or it’s your App ID
+             # Prefix in your App ID.
+            "key": "N8YQ2J6D7H",
+
+            # The certificate you downloaded when generating the key.
+            "certificate_key": """-----BEGIN PRIVATE KEY-----
+MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgsjys1hqKc8rP1NdF
+xUX2WTGKBlCFJLlUHNwHbNBu4S6gCgYIKoZIzj0DAQehRANCAATjOZ7MEyrzhb7J
+9ok8MnEY2ZiSJ5Tzg64XU3kieFTgKIzHghkDIhbEtJOv7TDdsL7aKD6G/FgJra9y
+4RO35p6V
+-----END PRIVATE KEY-----
+""",
+'redirect_uri': 'https://a16a-152-3-53-142.ngrok-free.app/accounts/apple/login/callback/',
+
+        },
+        'SCOPE': ['name', 'email'],
     }
 }
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
