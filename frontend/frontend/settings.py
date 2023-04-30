@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.localhost:8000','https://a16a-152-3-53-142.ngrok-free.app']
 
 # Application definition
-SITE_ID = 2
+SITE_ID = 3
 INSTALLED_APPS = [
     'ups.apps.UpsConfig',
     'django.contrib.admin',
