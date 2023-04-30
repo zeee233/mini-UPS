@@ -13,13 +13,16 @@ def sign_in(request):
         email = request.POST.get("user_email")
         password = request.POST.get("user_password")
         try:
-            user = User.objects.get(email=email)
+            temp_user = User.objects.get(email=email)
+            user = authenticate(request, username=temp_user.username, password=password)
         except User.DoesNotExist:
             user = None
-
+        
         print(user)
         if user is not None and check_password(password, user.password):
-            login(request, user)
+            backend = user.backend
+
+            login(request, user, backend=backend)
 
             return render(request, 'search_packages.html', {'user': user})
         else:
