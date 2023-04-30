@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bootstrap5',
+    # 'bootstrap5',
 
     # for google sign in 
     'django.contrib.sites',
@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'ups',
         'USER': 'postgres',
         'PASSWORD': 'passw0rd',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }

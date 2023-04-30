@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  db:
+      image: postgres
+      environment:
+        - POSTGRES_DB=ups
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=passw0rd
+      volumes:
+            - data-volume:/var/lib/postgresql/data
+  web-init:
+      build: ./frontend
+      command: /code/initserver.sh
+      volumes:
+        - ./frontend:/code
+      depends_on:
+        - db
+  web:
+      build: ./frontend
+      user: nobody
+      command: /code/runserver.sh
+      volumes:
+        - ./frontend:/code
+      expose:
+        - "8000"
+      depends_on:
+        - web-init
+  nginx:
+     image: nginx:latest
+     ports:
+       - "8000:8000"
+     volumes:
+       - ./nginx/config:/etc/nginx/conf.d
+     depends_on:
+       - web
+  web-backend:
+      build: ./ups
+      volumes:
+        - ./ups:/app
+      environment:
+        - POSTGRES_DB=ups
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=passw0rd
+        - POSTGRES_HOST=db
+      depends_on:
+        - db
+
+volumes:
+   data-volume: 

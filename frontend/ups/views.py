@@ -56,11 +56,10 @@ def search_packages(request):
 
 
 def search_package_id(request):
-    records = None
+    records = []
     if request.method=="POST":
         packageID = request.POST["packageid"]
         records = PackageD.objects.filter(package_id=packageID)
-        print(records)
         return render(request, 'search_packages.html', {'records': records})
     return render(request, 'search_packages.html', {'records': records})
 

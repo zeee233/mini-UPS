@@ -39,21 +39,8 @@ public class Main {
         // 关闭 session 和 sessionFactory
         session.close();
 
-        UpsServer upsServer = new UpsServer(22222, "vcm-31112.vm.duke.edu", sessionFactory);
+        UpsServer upsServer = new UpsServer(22222, args[0], sessionFactory);
         upsServer.start();
         sessionFactory.close();
-
-        // MockAmazon mockAmazon = new MockAmazon("127.0.0.1", 9999);
-        // mockAmazon.connectToWorld(mockAmazon.createUConnect(null, 30));
-        // mockAmazon.sendAInformWorld();
-
-        // for (int i = 0; i < 21; ++i) {
-        //     // Thread.sleep(5000);
-        //     mockAmazon.sendABookTruck();
-        //     System.out.println("send abooktruck " + i);
-        // }
-
-        // while (true) {
-        // }
     }
 }
