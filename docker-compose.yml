@@ -38,6 +38,8 @@ services:
       build: ./ups
       volumes:
         - ./ups:/app
+      ports:
+      - "22222:22222" # port for amazon
       depends_on:
         - db
 
