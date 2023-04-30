@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.localhost:8000','https://a16a-152-3-53-142.ngrok-free.app']
 
 # Application definition
-SITE_ID = 3
+SITE_ID = 2
 INSTALLED_APPS = [
     'ups.apps.UpsConfig',
     'django.contrib.admin',
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 
 MIDDLEWARE = [
+    'frontend.middleware.SiteConfigurationMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -136,7 +137,7 @@ xUX2WTGKBlCFJLlUHNwHbNBu4S6gCgYIKoZIzj0DAQehRANCAATjOZ7MEyrzhb7J
         'SCOPE': ['name', 'email'],
     }
 }
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+#ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'http'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -195,3 +196,4 @@ LOGOUT_REDIRECT_URL="/"
 # SECURE_SSL_REDIRECT = True #enfore https
 # SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='1095443399655-8uc6sn6m2g042unacofqs9ou971gakmg.apps.googleusercontent.com'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='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'
+# Apple redirect url: https://a16a-152-3-53-142.ngrok-free.app/accounts/apple/login/callback/
